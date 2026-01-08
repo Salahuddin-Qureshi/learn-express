@@ -17,12 +17,18 @@ exports.initSocket = async (server) => {
 
     // 2. Setup Redis Adapter (Pub/Sub)
     // We need a separate subClient for Redis Pub/Sub
-    const pubClient = redisClient.duplicate();
-    const subClient = redisClient.duplicate();
+    try {
+        const pubClient = redisClient.duplicate();
+        const subClient = redisClient.duplicate();
 
-    await Promise.all([pubClient.connect(), subClient.connect()]);
+        await Promise.all([pubClient.connect(), subClient.connect()]);
 
-    io.adapter(createAdapter(pubClient, subClient));
+        io.adapter(createAdapter(pubClient, subClient));
+        console.log("Socket.io Initialized with Redis Adapter");
+    } catch (err) {
+        console.warn("⚠️ Redis Adapter failed to connect. Falling back to Memory Adapter.");
+        console.warn("   Error:", err.message);
+    }
 
     // 3. Middlewares (Optional: Auth)
     // io.use((socket, next) => { ... verify token ... });
