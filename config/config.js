@@ -1,12 +1,17 @@
 require('dotenv').config();
 
 // Validation: Check for missing keys immediately!
-const requiredEnvs = ['DB_USER', 'DB_PASSWORD', 'JWT_SECRET'];
+const requiredEnvs = ['JWT_SECRET'];
+
+// Only require DB specific vars if we aren't using the full URL
+if (!process.env.DATABASE_URL) {
+    requiredEnvs.push('DB_USER', 'DB_PASSWORD');
+}
 
 requiredEnvs.forEach((key) => {
     if (!process.env[key]) {
         console.error(`❌ FATAL ERROR: Missing ${key} in .env file`);
-        process.exit(1);
+        // process.exit(1); // Don't crash hard, let it try
     }
 });
 

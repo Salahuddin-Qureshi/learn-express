@@ -1,13 +1,22 @@
 const { Pool } = require('pg');
 const config = require('./config/config');
 
-const pool = new Pool({
-    host: config.db.host,
-    user: config.db.user,
-    password: config.db.password,
-    database: config.db.name,
-    port: config.db.port,
-});
+const poolConfig = process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+        }
+    }
+    : {
+        host: config.db.host,
+        user: config.db.user,
+        password: config.db.password,
+        database: config.db.name,
+        port: config.db.port,
+    };
+
+const pool = new Pool(poolConfig);
 
 // Debugging: Check if config is loaded (Don't log the actual password!)
 console.log("-----------------------------------------");
