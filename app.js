@@ -18,11 +18,7 @@ app.use(helmet({
 // Allows legitimate requests from other origins (e.g., your frontend).
 // app.use(cors());
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:3000',
-        process.env.CLIENT_URL // Add your deployed Frontend URL here in Render Env Vars
-    ],
+    origin: true, // Allow any origin dynamically
     credentials: true
 }));
 const cookieParser = require('cookie-parser'); // Import this

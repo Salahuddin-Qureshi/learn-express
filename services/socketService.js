@@ -9,11 +9,9 @@ exports.initSocket = async (server) => {
     // 1. Initialize Socket.io
     io = new Server(server, {
         cors: {
-            origin: [
-                "http://localhost:5173",
-                "http://localhost:3000",
-                process.env.CLIENT_URL
-            ],
+            origin: (origin, callback) => {
+                callback(null, true);
+            },
             methods: ["GET", "POST"],
             credentials: true
         }
